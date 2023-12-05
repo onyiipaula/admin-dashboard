@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="shortcut icon" href="./admin.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body{
+            background-color:lightblue;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 10px;
+            padding: 10px;
+        }
+
+        .grid-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload Products</h2>
+        <form id="upload-form">
+            <div class="form-group">
+                <label for="photo">Photo:</label>
+                <input type="file" class="form-control" id="photo" name="photo">
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="text" class="form-control" id="price" name="price">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+        <h2>Products</h2>
+        <div class="grid-container" id="products-grid">
+            <!-- Products will be added here -->
+        </div>
+        <div class="product-container">
+            
+            <button class="remove-product">Remove</button>
+        </div>
+    </div>
+
+    <script>
+        let products = [];
+
+document.getElementById('upload-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    let photo = document.getElementById('photo').files[0];
+    let name = document.getElementById('name').value;
+    let price = document.getElementById('price').value;
+
+    if (photo && name && price) {
+        let reader = new FileReader();
+
+        reader.onload = function(e) {
+            let product = {
+                photo: e.target.result,
+                name: name,
+                price: price
+            };
+
+            products.push(product);
+            addProductToGrid(product);
+        };
+
+        reader.readAsDataURL(photo);
+    }
+});
+
+function addProductToGrid(product) {
+    let grid = document.getElementById('products-grid');
+    let item = document.createElement('div');
+
+    item.className = 'grid-item';
+    item.innerHTML = `
+        <img src="${product.photo}" alt="${product.name}" style="width: 100%;">
+        <h3>${product.name}</h3>
+        <p>$${product.price}</p>
+    `;
+
+    grid.appendChild(item);
+    // Function to handle the removal of a product container
+function removeProduct(event) {
+    var productContainer = event.target.parentElement;
+    productContainer.remove();
+}
+}
+fileInput.addEventListener('change', function(e) {
+    // ... the existing code ...
+
+    // Create a "Remove" button
+    var removeButton = document.createElement('button');
+    removeButton.classList.add('remove-product');
+    removeButton.textContent = 'Remove';
+
+    // Add the "Remove" button to the product container
+    productContainer.appendChild(removeButton);
+
+    // Add an event listener to the "Remove" button to remove the product container
+    removeButton.addEventListener('click', removeProduct);
+});
+    </script>
+</body>
+</html>
